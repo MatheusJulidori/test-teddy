@@ -7,6 +7,7 @@ import { HealthModule } from './health/health.module';
 import { LoggerModule } from 'nestjs-pino';
 import { randomUUID } from 'crypto';
 import { MetricsModule } from './metrics/metrics.module';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 
 @Module({
   imports: [
@@ -27,6 +28,11 @@ import { MetricsModule } from './metrics/metrics.module';
                 },
               }
             : undefined,
+      },
+    }),
+    PrometheusModule.register({
+      defaultMetrics: {
+        enabled: false,
       },
     }),
     DatabaseModule,

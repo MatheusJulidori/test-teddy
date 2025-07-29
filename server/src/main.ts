@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { Logger } from 'nestjs-pino';
+import { Logger, PinoLogger } from 'nestjs-pino';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -10,6 +10,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
   });
+
+  const logger = await app.resolve(Logger);
+  const pinoLogger = await app.resolve(PinoLogger);
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -18,9 +22,8 @@ async function bootstrap() {
     }),
   );
 
-  app.useLogger(app.get(Logger));
-
-  app.useGlobalInterceptors(new LoggingInterceptor(app.get(Logger)));
+  app.useLogger(logger);
+  app.useGlobalInterceptors(new LoggingInterceptor(pinoLogger));
 
   const config = new DocumentBuilder()
     .setTitle('API')
