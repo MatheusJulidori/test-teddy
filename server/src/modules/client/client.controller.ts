@@ -19,14 +19,14 @@ export class ClientController {
   constructor(private readonly clientService: ClientService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Criar cliente' })
-  @ApiResponse({ status: 201, description: 'Cliente criado com sucesso.' })
+  @ApiOperation({ summary: 'Create client' })
+  @ApiResponse({ status: 201, description: 'Client created successfully.' })
   create(@Body() dto: CreateClientDto) {
     return this.clientService.create(dto);
   }
 
   @Get()
-  @ApiOperation({ summary: 'Listar todos os clientes com paginação' })
+  @ApiOperation({ summary: 'List all clients with pagination' })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   findAll(@Query('page') page = 1, @Query('limit') limit = 10) {
@@ -34,19 +34,19 @@ export class ClientController {
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Buscar cliente por ID' })
+  @ApiOperation({ summary: 'Get client by ID' })
   findOne(@Param('id') id: string) {
     return this.clientService.findOne(+id);
   }
 
   @Put(':id')
-  @ApiOperation({ summary: 'Atualizar cliente por ID' })
+  @ApiOperation({ summary: 'Update client by ID' })
   update(@Param('id') id: string, @Body() dto: UpdateClientDto) {
     return this.clientService.update(+id, dto);
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Remover cliente por ID' })
+  @ApiOperation({ summary: 'Remove client by ID' })
   remove(@Param('id') id: string) {
     return this.clientService.remove(+id);
   }
