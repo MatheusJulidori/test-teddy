@@ -13,6 +13,32 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - teddy_net
+
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: teddy_server
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    depends_on:
+      - postgres
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=teddy_user
+      - DB_PASSWORD=teddy_password
+      - DB_NAME=teddy_db
+    networks:
+      - teddy_net
 
 volumes:
   postgres_data:
+
+networks:
+  teddy_net:
