@@ -15,13 +15,13 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[--color-background] px-4">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <div className="max-w-md w-full space-y-4 text-center">
-        <h1 className="text-xl font-semibold text-[--color-foreground]">Olá, seja bem vindo!</h1>
+        <h1 className="text-xl font-semibold text-foreground">Olá, seja bem vindo!</h1>
         <Input
           type="text"
           placeholder="Digite seu nome:"
-          className="w-full border border-[--color-border] rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[--color-primary]"
+          className="w-full border border-border rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
