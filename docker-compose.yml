@@ -34,6 +34,26 @@ services:
       - DB_USER=teddy_user
       - DB_PASSWORD=teddy_password
       - DB_NAME=teddy_db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/v1/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    networks:
+      - teddy_net
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: teddy_client
+    ports:
+      - "5173:5173"
+    depends_on:
+      server:
+        condition: service_healthy
+    environment:
+      - VITE_API_URL=http://server:3000/api/v1
     networks:
       - teddy_net
 
