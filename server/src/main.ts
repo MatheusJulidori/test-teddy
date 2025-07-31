@@ -29,6 +29,7 @@ async function bootstrap() {
     .setTitle('API')
     .setDescription('API Docs')
     .setVersion('1.0')
+    .addServer('/api/v1')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
