@@ -28,6 +28,9 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
                 },
               }
             : undefined,
+        autoLogging: {
+          ignore: (req) => req.url === '/api/v1/health',
+        },
       },
     }),
     PrometheusModule.register({

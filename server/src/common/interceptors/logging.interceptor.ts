@@ -18,9 +18,13 @@ export class LoggingInterceptor implements NestInterceptor {
     const response = ctx.getResponse<Response>();
 
     const { method, url } = request;
+
+    if (url === '/api/v1/health') {
+      return next.handle();
+    }
+
     const requestId = request.id ?? '-';
     const userAgent = request.headers['user-agent'] ?? '-';
-
     const now = Date.now();
 
     this.logger.info(
