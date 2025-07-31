@@ -13,4 +13,7 @@ export class Client {
 
   @Column('decimal', { precision: 15, scale: 2 })
   companyValue: number;
+
+  @Column('boolean', { default: false })
+  isSelected: boolean;
 }

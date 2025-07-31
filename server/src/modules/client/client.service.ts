@@ -110,6 +110,28 @@ export class ClientService {
     }
   }
 
+  async toggleSelection(id: number): Promise<Client> {
+    this.logger.info({ id }, 'Toggling client selection');
+    try {
+      const client = await this.findOne(id);
+      client.isSelected = !client.isSelected;
+      const updated = await this.clientRepo.save(client);
+      this.logger.info(
+        { id, isSelected: updated.isSelected },
+        'Client selection toggled',
+      );
+      return updated;
+    } catch (error: unknown) {
+      this.logger.error({ err: error, id }, 'Error toggling client selection');
+      if (error instanceof NotFoundException) {
+        throw error;
+      } else if (error instanceof Error) {
+        throw new InternalServerErrorException(error.message);
+      }
+      throw new InternalServerErrorException('Unknown error');
+    }
+  }
+
   async remove(id: number): Promise<void> {
     this.logger.info({ id }, 'Removing client');
     try {

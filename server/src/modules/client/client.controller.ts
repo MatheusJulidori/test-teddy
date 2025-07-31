@@ -7,6 +7,7 @@ import {
   Delete,
   Put,
   Query,
+  Patch,
 } from '@nestjs/common';
 import { ClientService } from './client.service';
 import { CreateClientDto } from './dto/create-client.dto';
@@ -31,6 +32,12 @@ export class ClientController {
   @ApiQuery({ name: 'limit', required: false, type: Number })
   findAll(@Query('page') page = 1, @Query('limit') limit = 10) {
     return this.clientService.findAll(+page, +limit);
+  }
+
+  @Patch(':id/select')
+  @ApiOperation({ summary: 'Toggle client selection' })
+  toggleSelection(@Param('id') id: string) {
+    return this.clientService.toggleSelection(+id);
   }
 
   @Get(':id')

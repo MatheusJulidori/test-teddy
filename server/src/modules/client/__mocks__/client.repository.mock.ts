@@ -20,6 +20,7 @@ export const createMockClient = (overrides?: Partial<Client>): Client => ({
   name: 'Test Client',
   salary: 5000,
   companyValue: 150000,
+  isSelected: false,
   ...overrides,
 });
 

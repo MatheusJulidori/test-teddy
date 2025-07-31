@@ -49,6 +49,7 @@ describe('ClientService', () => {
       name: 'John Doe',
       salary: 5000,
       companyValue: 150000,
+      isSelected: false,
     };
 
     it('should create a client successfully', async () => {
@@ -88,8 +89,20 @@ describe('ClientService', () => {
 
   describe('findAll', () => {
     const mockClients: Client[] = [
-      { id: 1, name: 'John Doe', salary: 5000, companyValue: 150000 },
-      { id: 2, name: 'Jane Smith', salary: 6000, companyValue: 200000 },
+      {
+        id: 1,
+        name: 'John Doe',
+        salary: 5000,
+        companyValue: 150000,
+        isSelected: false,
+      },
+      {
+        id: 2,
+        name: 'Jane Smith',
+        salary: 6000,
+        companyValue: 200000,
+        isSelected: false,
+      },
     ];
 
     it('should return paginated clients successfully', async () => {
@@ -144,6 +157,7 @@ describe('ClientService', () => {
       name: 'John Doe',
       salary: 5000,
       companyValue: 150000,
+      isSelected: false,
     };
 
     it('should return a client when found', async () => {
@@ -183,6 +197,7 @@ describe('ClientService', () => {
       name: 'John Updated',
       salary: 5500,
       companyValue: 150000,
+      isSelected: false,
     };
 
     it('should update a client successfully', async () => {
@@ -227,6 +242,7 @@ describe('ClientService', () => {
       name: 'John Doe',
       salary: 5000,
       companyValue: 150000,
+      isSelected: false,
     };
 
     it('should remove a client successfully', async () => {
