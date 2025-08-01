@@ -34,7 +34,7 @@ export class ClientController {
     return this.clientService.findAll(+page, +limit);
   }
 
-  @Patch(':id/select')
+  @Patch('select/:id')
   @ApiOperation({ summary: 'Toggle client selection' })
   toggleSelection(@Param('id') id: string) {
     return this.clientService.toggleSelection(+id);
