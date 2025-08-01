@@ -4,6 +4,7 @@ import {
   NotFoundException,
   InternalServerErrorException,
 } from '@nestjs/common';
+import { PinoLogger } from 'nestjs-pino';
 import { ClientService } from './client.service';
 import { Client } from './entities/client.entity';
 import { CreateClientDto } from './dto/create-client.dto';
@@ -14,6 +15,17 @@ describe('ClientService', () => {
   let service: ClientService;
   let repositoryMock: typeof mockClientRepository;
 
+  const mockPinoLogger = {
+    setContext: jest.fn(),
+    info: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn(),
+  };
+
+  const mockCounter = {
+    inc: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -21,6 +33,14 @@ describe('ClientService', () => {
         {
           provide: getRepositoryToken(Client),
           useValue: mockClientRepository,
+        },
+        {
+          provide: PinoLogger,
+          useValue: mockPinoLogger,
+        },
+        {
+          provide: 'PROM_METRIC_CLIENT_CREATE_TOTAL',
+          useValue: mockCounter,
         },
       ],
     }).compile();

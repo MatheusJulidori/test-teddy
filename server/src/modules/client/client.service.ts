@@ -67,6 +67,35 @@ export class ClientService {
     }
   }
 
+  async findSelected(
+    page = 1,
+    limit = 10,
+  ): Promise<{ data: Client[]; total: number; page: number; limit: number }> {
+    this.logger.info(
+      { page, limit },
+      'Fetching selected clients with pagination',
+    );
+    try {
+      const [data, total] = await this.clientRepo.findAndCount({
+        where: { isSelected: true },
+        skip: (page - 1) * limit,
+        take: limit,
+        order: { id: 'ASC' },
+      });
+      this.logger.info(
+        { count: data.length, total },
+        'Selected clients fetched',
+      );
+      return { data, total, page, limit };
+    } catch (error: unknown) {
+      this.logger.error({ err: error }, 'Error fetching selected clients');
+      if (error instanceof Error) {
+        throw new InternalServerErrorException(error.message);
+      }
+      throw new InternalServerErrorException('Unknown error');
+    }
+  }
+
   async findOne(id: number): Promise<Client> {
     this.logger.info({ id }, 'Fetching client by ID');
     try {
@@ -126,6 +155,28 @@ export class ClientService {
       if (error instanceof NotFoundException) {
         throw error;
       } else if (error instanceof Error) {
+        throw new InternalServerErrorException(error.message);
+      }
+      throw new InternalServerErrorException('Unknown error');
+    }
+  }
+
+  async toggleAllSelection(ids: number[]): Promise<void> {
+    this.logger.info({ ids }, 'Toggling selection for multiple clients');
+    try {
+      await this.clientRepo
+        .createQueryBuilder()
+        .update(Client)
+        .set({ isSelected: () => 'NOT isSelected' })
+        .whereInIds(ids)
+        .execute();
+      this.logger.info({ ids }, 'All clients selection toggled');
+    } catch (error: unknown) {
+      this.logger.error(
+        { err: error, ids },
+        'Error toggling all clients selection',
+      );
+      if (error instanceof Error) {
         throw new InternalServerErrorException(error.message);
       }
       throw new InternalServerErrorException('Unknown error');

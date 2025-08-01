@@ -34,10 +34,24 @@ export class ClientController {
     return this.clientService.findAll(+page, +limit);
   }
 
+  @Get('selected')
+  @ApiOperation({ summary: 'List selected clients with pagination' })
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
+  findSelected(@Query('page') page = 1, @Query('limit') limit = 10) {
+    return this.clientService.findSelected(+page, +limit);
+  }
+
   @Patch('select/:id')
   @ApiOperation({ summary: 'Toggle client selection' })
   toggleSelection(@Param('id') id: string) {
     return this.clientService.toggleSelection(+id);
+  }
+
+  @Patch('toggle-all')
+  @ApiOperation({ summary: 'Toggle selection for multiple clients' })
+  toggleAllSelection(@Body() body: { ids: number[] }) {
+    return this.clientService.toggleAllSelection(body.ids);
   }
 
   @Get(':id')
