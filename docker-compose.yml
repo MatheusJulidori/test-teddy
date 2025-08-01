@@ -43,20 +43,20 @@ services:
     networks:
       - teddy_net
 
-  # client:
-  #   build:
-  #     context: ./client
-  #     dockerfile: Dockerfile
-  #   container_name: teddy_client
-  #   ports:
-  #     - "5173:5173"
-  #   depends_on:
-  #     server:
-  #       condition: service_healthy
-  #   environment:
-  #     - VITE_API_URL=http://server:3000/api/v1
-  #   networks:
-  #     - teddy_net
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: teddy_client
+    ports:
+      - "5173:5173"
+    depends_on:
+      server:
+        condition: service_healthy
+    environment:
+      - VITE_API_URL=http://localhost:3000/api/v1
+    networks:
+      - teddy_net
 
 volumes:
   postgres_data:
