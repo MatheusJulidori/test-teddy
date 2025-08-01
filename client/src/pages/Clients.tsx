@@ -127,7 +127,7 @@ export function ClientsPage() {
   if (error) {
     return (
       <div className="flex justify-center items-center min-h-64">
-        <div className="text-lg text-red-500">
+        <div className="text-lg text-destructive">
           Error loading clients: {error.message}
         </div>
       </div>

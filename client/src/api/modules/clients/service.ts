@@ -10,12 +10,29 @@ export async function getClients(page = 1, limit = 10): Promise<ClientResponse> 
   }
 }
 
+export async function getSelectedClients(page = 1, limit = 10): Promise<ClientResponse> {
+  try{
+    const res = await api.get('/clients/selected', { params: { page, limit } });
+    return res.data;
+  } catch (error: unknown) {
+    throw new Error('Failed to fetch selected clients: ' + (error as Error).message);
+  }
+}
+
 export async function toggleClientSelection(id: number): Promise<Client> {
   try {
     const res = await api.patch(`/clients/select/${id}`);
     return res.data;
   } catch (error: unknown) {
     throw new Error('Failed to toggle client selection: ' + (error as Error).message);
+  }
+}
+
+export async function toggleAllClientsSelection(ids: number[]): Promise<void> {
+  try {
+    await api.patch('/clients/toggle-all', { ids });
+  } catch (error: unknown) {
+    throw new Error('Failed to toggle all clients selection: ' + (error as Error).message);
   }
 }
 

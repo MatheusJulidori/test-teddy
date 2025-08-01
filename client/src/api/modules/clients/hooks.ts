@@ -6,11 +6,13 @@ import {
 } from '@tanstack/react-query';
 import {
   getClients,
+  getSelectedClients,
   getClientById,
   createClient,
   updateClient,
   deleteClient,
   toggleClientSelection,
+  toggleAllClientsSelection,
 } from '@/api/modules/clients/service';
 import type { CreateClient, UpdateClient } from '@/api/modules/clients/types';
 
@@ -18,6 +20,15 @@ export const useClientList = (page = 1, limit = 10) =>
   useQuery({
     queryKey: ['clients', { page, limit }],
     queryFn: () => getClients(page, limit),
+    placeholderData: keepPreviousData,
+    staleTime: 1000 * 60 * 5,
+    retry: 1,
+  });
+
+export const useSelectedClientList = (page = 1, limit = 10) =>
+  useQuery({
+    queryKey: ['selected-clients', { page, limit }],
+    queryFn: () => getSelectedClients(page, limit),
     placeholderData: keepPreviousData,
     staleTime: 1000 * 60 * 5,
     retry: 1,
@@ -62,9 +73,18 @@ export const useClientMutations = () => {
     mutationFn: (id: number) => toggleClientSelection(id),
     onSuccess: (_, id) => {
       void qc.invalidateQueries({ queryKey: ['clients'] });
+      void qc.invalidateQueries({ queryKey: ['selected-clients'] });
       void qc.invalidateQueries({ queryKey: ['clients', id] });
     },
   });
 
-  return { create, update, remove, toggleSelect };
+  const toggleAllSelected = useMutation({
+    mutationFn: (ids: number[]) => toggleAllClientsSelection(ids),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ['clients'] });
+      void qc.invalidateQueries({ queryKey: ['selected-clients'] });
+    },
+  });
+
+  return { create, update, remove, toggleSelect, toggleAllSelected };
 };
